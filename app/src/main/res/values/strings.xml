@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Reminders</string>
+    <string name="total">По времени</string>
+    <string name="сategory">По категориям</string>
+    <string name="info">Прошедшие</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_not">Все напоминания</string>
+    <string name="add">Добавить уведомление</string>
+    <string name="change_time">Время</string>
+    <string name="channel_name_0">Канал для особо важных уведомлений</string>
+    <string name="channel_description_0">Описание канала для особо важных уведомлений</string>
+    <string name="channel_name_1">Канал для средне важных уведомлений</string>
+    <string name="channel_description_1">Описание канала для средне важных уведомлений</string>
+    <string name="channel_name_2">Канал для чтобы было уведомлений</string>
+    <string name="channel_description_2">Описание канала для чтобы было уведомлений</string>
+    <string name="description">Описание:</string>
+    <string name="name_">Название:</string>
+    <string name="date_time">Дата и время:</string>
+    <string name="choosen_time">Выбранное время:</string>
+    <string name="not_pick">Еще не выбранно</string>
+    <string name="choise_importance">Выберите важность:</string>
+    <string name="menu_importance_0">Особо важно</string>
+    <string name="menu_importance_0_text">Издает звук и отправляет push-уведомление</string>
+    <string name="menu_importance_1">Средне Важно</string>
+    <string name="menu_importance_1_text">Издает звук</string>
+    <string name="menu_importance_2">Чтобы было</string>
+    <string name="menu_importance_2_text">Не издает звука и не отображается в строке состояния</string>
+    <string name="notificationName">Название уведомления</string>
+    <string name="notidicationDescription">Описание уведомления</string>
+    <string name="timeNotification">Время</string>
+    <string name="dateNotification">Дата</string>
+
+</resources>
