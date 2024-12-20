@@ -12,7 +12,7 @@
         />
     <item
         android:id="@+id/info"
-        android:icon="@drawable/info"
+        android:icon="@drawable/time_button"
         android:title="@string/info"
         />
 

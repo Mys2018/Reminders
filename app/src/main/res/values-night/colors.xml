@@ -4,13 +4,13 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#AAAAAA</color>
     <color name="system">#e8def8</color>
-    <color name="red">#ffafaf</color>
-    <color name="green">#B5EAAF</color>
-    <color name="yellow">#EAEAAF</color>
-    <color name="violet">#D6C7EF</color>
+    <color name="red">#60ffafaf</color>
+    <color name="green">#60B5EAAF</color>
+    <color name="yellow">#60EAEAAF</color>
+    <color name="violet">#50D6C7EF</color>
     <color name="light_grey">#50808080</color>
 
-    <color name="colorTextPrimary">#000000</color>
-    <color name="colorPrimaryVariant">#353535</color>
+    <color name="colorTextPrimary">#FFFFFF</color>
+    <color name="colorPrimaryVariant">#7CDCDCDC</color>
 
 </resources>

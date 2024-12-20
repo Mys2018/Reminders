@@ -1,29 +1,26 @@
 package com.kirillzybin.reminders
 
 import SpaceItemDecoration
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.kirillzybin.reminders.NotificationRepository.items
+import com.kirillzybin.reminders.NotificationRepository.items_complited
 
-class CategoryFragment : Fragment(R.layout.category_fragment) {
+class CompletedFragment : Fragment(R.layout.completed_fragment) {
 
-    val adapter = Notification_RecyclerView(items)
+    val adapter = Notification_RecyclerView(items_complited)
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val importance_0 = view.findViewById<RecyclerView>(R.id.rec_0)
-        importance_0.addItemDecoration(SpaceItemDecoration(5))
+        val completedFragment = view.findViewById<RecyclerView>(R.id.comp_rv)
+        completedFragment.addItemDecoration(SpaceItemDecoration(5))
 
-        importance_0.adapter = adapter
-        importance_0.setLayoutManager(LinearLayoutManager(requireContext()))
-
+        completedFragment.adapter = adapter
+        completedFragment.setLayoutManager(LinearLayoutManager(requireContext()))
 
         val swipeCallback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -39,17 +36,17 @@ class CategoryFragment : Fragment(R.layout.category_fragment) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val pos = viewHolder.adapterPosition
-                items.removeAt(pos)
+                items_complited.removeAt(pos)
                 adapter.notifyItemRemoved(pos)
             }
         }
 
         val swipeHelper = ItemTouchHelper(swipeCallback)
-        swipeHelper.attachToRecyclerView(importance_0)
+        swipeHelper.attachToRecyclerView(completedFragment)
 
-        (activity as? MainActivity)?.setAdapterCategory(adapter)
+        (activity as? MainActivity)?.setAdapterCompleted(adapter)
 
-        NotificationRepository.sortItems_importance()
+        NotificationRepository.sortItems_time()
         adapter.updateData()
     }
 }

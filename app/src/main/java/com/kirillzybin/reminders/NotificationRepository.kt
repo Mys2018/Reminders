@@ -2,18 +2,11 @@ package com.kirillzybin.reminders
 
 object NotificationRepository {
     var items = mutableListOf<Notification>()
+    var items_complited = mutableListOf<Notification>()
 
     fun addNotification(notification: Notification) {
         items.add(notification)
         sortItems_time()
-    }
-
-    fun removeNotification(notification: Notification) {
-        items.remove(notification)
-    }
-
-    fun removeNotificationIndex(index: Int) {
-        items.removeAt(index)
     }
 
     fun sortItems_time() {

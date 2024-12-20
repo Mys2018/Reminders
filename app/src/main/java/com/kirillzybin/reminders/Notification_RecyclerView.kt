@@ -47,6 +47,20 @@ class Notification_RecyclerView(var notific: MutableList<Notification>): Recycle
         updateData()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateViewHolder(newData: MutableList<Notification>) {
+        val oldItems = notific // Сохраняем старый список
+        notific.clear() // Очищаем старый список
+        notific = oldItems // Заменяем старый список
+        notifyDataSetChanged() // Уведомляем адаптер
+    }
+
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun updateData(newNotifications: List<Notification>) {
+//        notific = newNotifications.toMutableList()
+//        notifyDataSetChanged()
+//    }
+
 
 
 
@@ -63,9 +77,12 @@ class Notification_RecyclerView(var notific: MutableList<Notification>): Recycle
         } else if (notific[position].importance == 1) {
             holder.root.background =
                 ContextCompat.getDrawable(holder.itemView.context, R.drawable.background_for_1)
-        } else {
+        } else if (notific[position].importance == 2) {
             holder.root.background =
                 ContextCompat.getDrawable(holder.itemView.context, R.drawable.background_for_2)
+        } else if (notific[position].importance == 3) {
+            holder.root.background =
+                ContextCompat.getDrawable(holder.itemView.context, R.drawable.background_for_3)
         }
     }
 

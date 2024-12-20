@@ -22,8 +22,8 @@
             android:id="@+id/name_rv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorTextPrimary"
             android:text="@string/notificationName"
-            android:textColor="@android:color/black"
             android:textSize="@dimen/_16sp"
             android:textStyle="bold" />
 
@@ -31,6 +31,7 @@
             android:id="@+id/description_rv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryVariant"
             android:text="@string/notidicationDescription"
             android:textSize="@dimen/_14sp" />
 
@@ -51,14 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/timeNotification"
+            android:textColor="@color/colorTextPrimary"
             android:gravity="center"
-            android:textColor="@android:color/black"
             android:textSize="@dimen/_16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/date_rv"
             android:gravity="center"
+            android:textColor="@color/colorTextPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dateNotification"

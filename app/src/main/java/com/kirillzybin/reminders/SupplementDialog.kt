@@ -57,7 +57,7 @@ class SupplementDialog : DialogFragment() {
             .setTitle("Добавление")
             .setView(view)
             .setPositiveButton("Добавить") { _, _ ->
-                val nameOut = if (name.text.toString() != "") name.text.toString() else ("Напоминание от ${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.mm.dd hh:mm"))}")
+                val nameOut = if (name.text.toString() != "") name.text.toString() else ("Напоминание от ${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"))}")
                 val descriptionOut = if(description.text.toString() != "") description.text.toString() else ("Описание отсутствует")
                 val importanceOut = importance
                 val timeOut = timeSel

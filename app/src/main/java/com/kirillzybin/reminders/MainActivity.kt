@@ -22,6 +22,9 @@ import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.content.BroadcastReceiver
 import android.icu.util.Calendar
+import android.util.Log
+import android.widget.Toast
+import com.kirillzybin.reminders.NotificationRepository.items_complited
 
 class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
 
@@ -30,18 +33,19 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
     private val channel2ID = "channel_for_2"
     private val notificationCode = 1
 
-    var notificationAdapter: Notification_RecyclerView? = null
-
-    var categoryFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? CategoryFragment
-
-
+    companion object{
+        var notificationAdapterTotal: Notification_RecyclerView? = null
+        var notificationAdapterCategory: Notification_RecyclerView? = null
+        var notificationAdapterCompleted: Notification_RecyclerView? = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        items = FileUtils.loadNotifications(this).toMutableList()
+        items = FileUtils.loadNotifications_active(this).toMutableList()
+        items_complited = FileUtils.loadNotifications_completed(this).toMutableList()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -61,9 +65,6 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
         if (existingChannel2 == null)
             createChannel2()
 
-
-
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
@@ -79,6 +80,12 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
 
         val addButton = findViewById<FloatingActionButton>(R.id.add_button)
 
+        if (savedInstanceState == null) {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragmentContainerView, TotalFragment())
+                .commit()
+        }
 
         val navBar = findViewById<BottomNavigationView>(R.id.bottomNav)
         navBar.setOnItemSelectedListener {
@@ -102,7 +109,7 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
                 R.id.info -> {
                     supportFragmentManager
                         .beginTransaction()
-                        .replace(R.id.fragmentContainerView, InfoFragment())
+                        .replace(R.id.fragmentContainerView, CompletedFragment())
                         .commit()
                     true
                 }
@@ -118,13 +125,21 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
     }
 
     override fun onStop() {
-        FileUtils.saveNotifications(this, items)
+        FileUtils.saveNotifications_active(this, items)
+        FileUtils.saveNotifications_completed(this, items_complited)
         super.onStop()
     }
 
-    fun setAdapter(adapter: Notification_RecyclerView) {
-        this.notificationAdapter = adapter
+    fun setAdapterTotal(adapter: Notification_RecyclerView) {
+        notificationAdapterTotal = adapter
     }
+    fun setAdapterCategory(adapter: Notification_RecyclerView) {
+        notificationAdapterTotal = adapter
+    }
+    fun setAdapterCompleted(adapter: Notification_RecyclerView) {
+        notificationAdapterCompleted = adapter
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onDialogData(
@@ -143,13 +158,13 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
                 date
             )
         )
-
-
-        val categoryFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as? CategoryFragment
-        categoryFragment?.adapter_important?.updateData()
-        notificationAdapter?.notifyDataSetChanged()
+        notificationAdapterTotal?.notifyDataSetChanged()
+        notificationAdapterCategory?.notifyDataSetChanged()
+        notificationAdapterCompleted?.notifyDataSetChanged()
         setNotification(this, name, description, importance, time, date)
-        FileUtils.saveNotifications(this, items)
+        FileUtils.saveNotifications_active(this, items)
+        FileUtils.saveNotifications_completed(this, items_complited)
+        Toast.makeText(this, "Уведомление \"$name\" добавлено", Toast.LENGTH_SHORT).show()
     }
 
     private fun setNotification(
@@ -199,7 +214,6 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
             pendingIntent
         )
     }
-
     private fun createChannel0() {
         val name = getString(R.string.channel_name_0)
         val descriptionText = getString(R.string.channel_description_0)
@@ -212,7 +226,6 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
     }
-
     private fun createChannel1() {
         val name = getString(R.string.channel_name_1)
         val descriptionText = getString(R.string.channel_description_1)
@@ -221,9 +234,7 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
         mChannel.description = descriptionText
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
-
     }
-
     private fun createChannel2() {
         val name = getString(R.string.channel_name_2)
         val descriptionText = getString(R.string.channel_description_2)
@@ -233,7 +244,6 @@ class MainActivity : AppCompatActivity(), SupplementDialog.DataListener {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(mChannel)
     }
-
 }
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -244,19 +254,28 @@ class AlarmReceiver : BroadcastReceiver() {
         val importance = intent.getIntExtra("IMPORTANCE", 0)
 
 
-        FileUtils.saveNotifications(context, items)
+        FileUtils.saveNotifications_active(context, items)
         sendNotification(context, name, description, importance)
 
         val notificationToRemove = items.firstOrNull {
             it.name == name && it.description == description && it.importance == importance
         }
         if (notificationToRemove != null) {
-            val index = items.indexOf(notificationToRemove)
-            (context as? MainActivity)?.notificationAdapter?.removeItem(index)
-            (context as? MainActivity)?.notificationAdapter?.notifyDataSetChanged()
             items.remove(notificationToRemove)
+            val updatedNotification = notificationToRemove.copy(importance = 3)
+            items_complited.add(updatedNotification)
+            MainActivity.notificationAdapterTotal?.updateData()
+            MainActivity.notificationAdapterCategory?.updateData()
+            MainActivity.notificationAdapterCompleted?.updateData()
+
+
+
+
         }
-        FileUtils.saveNotifications(context, items)
+        Log.d("Save list 1", items.toString())
+        FileUtils.saveNotifications_active(context, items)
+        Log.d("Save list 2", items_complited.toString())
+        FileUtils.saveNotifications_completed(context, items_complited)
     }
 
     @SuppressLint("NotifyDataSetChanged")
