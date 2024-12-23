@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Reminders</string>
+    <string name="app_name">Напоминания</string>
     <string name="total">По времени</string>
     <string name="сategory">По категориям</string>
     <string name="info">Прошедшие</string>
